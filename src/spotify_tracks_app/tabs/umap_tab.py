@@ -2,7 +2,7 @@
 
 Each point is one track, positioned by a 2-D UMAP projection of its numeric
 audio features (precomputed offline in scripts/precompute.py). Points are
-coloured by ``genre``, which was *not* used to build the projection -- so any
+coloured by ``genre``, which was *not* used to build the projection - so any
 genre grouping you see is structure UMAP found from the audio features alone.
 
 Numeric features fed to UMAP (resolved by the ">= 20 unique values AND strictly
@@ -120,7 +120,7 @@ and its axes have a clear "variance explained" meaning. **UMAP** instead builds
 a graph of each point's nearest neighbours and lays it out so that *local*
 neighbourhoods are preserved: nearby points are genuinely similar tracks, and
 tight clusters are meaningful. The trade-off: distances *between* far-apart
-clusters (and the axes themselves) carry little quantitative meaning -- so read
+clusters (and the axes themselves) carry little quantitative meaning - so read
 UMAP for grouping, not for absolute distances.
 """,
         style={

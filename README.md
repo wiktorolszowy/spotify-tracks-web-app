@@ -66,9 +66,31 @@ To run on the full dataset, set `SAMPLE_FRAC = 1.0` in
       spotify-tracks-app
   # open http://localhost:8050
   ```
-- **Plotly Cloud:** `scripts/deploy_prep.py` builds a temporary folder combining the
-  code with the precomputed data files for the Dash/Plotly CLI, keeping the repo
-  itself data-free.
+- **Plotly Cloud:** the app folder must contain the data (Cloud has no volume
+  mounts), while the repo stays data-free. `scripts/deploy_prep.py` assembles a
+  self-contained folder **outside** the repo that combines the code, the
+  precomputed data, a runtime-only `pyproject.toml`, and an `app.py`
+  entrypoint:
+
+  ```bash
+  # 1. Precompute first (writes umap.parquet to the data dir).
+  uv run python scripts/precompute.py
+
+  # 2. Build the deploy folder (default: ../spotify-tracks-web-app-deploy).
+  uv run python scripts/deploy_prep.py
+
+  # 3. Publish it (any one of):
+  cd ../spotify-tracks-web-app-deploy
+  pip install plotly-cloud     # provides the `plotly` CLI
+  deactivate
+  plotly user login            # authenticate (OAuth in the browser)
+  plotly app publish           # publish to Plotly Cloud
+  #   or: pip install "dash[cloud]" && python app.py, then use the dev-tools panel
+  #   or: upload the folder at https://cloud.plotly.com (< 80 MiB)
+  ```
+
+  The bundle is ~17 MiB and installs no umap/precompute dependencies, so Cloud
+  builds are small and fast.
 
 ## What's next (if there was time)
 
