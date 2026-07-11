@@ -69,3 +69,34 @@ To run on the full dataset, set `SAMPLE_FRAC = 1.0` in
 - **Plotly Cloud:** `scripts/deploy_prep.py` builds a temporary folder combining the
   code with the precomputed data files for the Dash/Plotly CLI, keeping the repo
   itself data-free.
+
+## What's next (if there was time)
+
+- **Align on user needs.** Talk to end users about which patterns they actually
+  want to explore, and shape the tabs around those questions.
+- **Review with a frontend expert.** Discuss the current UI/UX and architecture
+  with an experienced frontend engineer.
+- **Harden the CI pipeline.** Add Sonar (code quality) and Snyk (dependency /
+  security) checks.
+- **Expand the test suite.** Add many more tests, including end-to-end browser
+  tests with Playwright.
+- **Add analytical sanity checks.** Independently regenerate the same plots as
+  non-interactive figures to confirm the patterns match. I have not run any such
+  sanity checks yet.
+- **Automate deployment.** Make the release to Plotly Cloud a one-command (or
+  fully automated) step.
+- **Speed up the UMAP tab.** Rendering was instant on the 10% sample but takes a
+  few seconds on the full ~230k-row dataset; investigate faster loading /
+  rendering.
+- **Investigate duplicates.** Some `track_id` values appear multiple times;
+  understand why and decide how to handle them.
+- **Enforce PR-only workflow for `develop`.** Currently only `main` is protected
+  via PRs; require PRs for `develop` too and drop direct pushes.
+- **Improve feature selection.** Find a more principled way to decide which
+  features are used for the UMAP projection (and the other analyses); the current
+  "numeric-only + >= 20 unique" heuristic is a bit ad hoc.
+- **Fix the histogram flash.** The KS histograms briefly render with bare axes
+  (under a second) before the bars appear; investigate whether there is a fix.
+- **Slim the Docker image.** The image is ~3.5 GB. Split precompute-only
+  dependencies (`umap-learn`, `scikit-learn`, `numba`) into a separate
+  dependency group so the runtime image is much smaller.
