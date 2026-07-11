@@ -122,3 +122,8 @@ To run on the full dataset, set `SAMPLE_FRAC = 1.0` in
 - **Slim the Docker image.** The image is ~3.5 GB. Split precompute-only
   dependencies (`umap-learn`, `scikit-learn`, `numba`) into a separate
   dependency group so the runtime image is much smaller.
+- **Align the local and Plotly Cloud environments.** Local development uses the
+  Docker image (full `pyproject.toml` + gunicorn), while the Cloud deploy bundle
+  has its own runtime-only `pyproject.toml`. Converge these so the two
+  environments (dependencies, Python version, run command) stay in sync and
+  cannot drift.
