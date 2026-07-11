@@ -152,6 +152,12 @@ def layout() -> Component:
         [
             html.H2("UMAP map of tracks"),
             _explanation(),
+            html.P(
+                "Interesting pattern: the audio features can be linked to genre "
+                "differences, with some genres being quite distinct - check "
+                "'Classical' vs. 'Comedy', e.g.",
+                style={"fontWeight": "bold", "color": "#1DB954"},
+            ),
             dcc.Graph(
                 id="umap-graph",
                 figure=_build_figure(),

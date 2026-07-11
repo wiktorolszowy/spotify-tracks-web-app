@@ -206,6 +206,12 @@ def layout() -> Component:
         [
             html.H2("Top vs. bottom popularity"),
             _explanation(),
+            html.P(
+                "Interesting pattern: (when selecting 'Comedy') in comedy tracks "
+                "loudness seems to be associated with higher popularity "
+                "(closer to 0 -> louder).",
+                style={"fontWeight": "bold", "color": "#1DB954"},
+            ),
             # Wrapped in a positioned, high-z-index container so the open
             # dropdown menu renders solidly above the graph below it.
             html.Div(
