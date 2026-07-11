@@ -56,7 +56,16 @@ To run on the full dataset, set `SAMPLE_FRAC = 1.0` in
 
 ## Deployment
 
-- **Local container:** see `Dockerfile` (data is mounted as a volume, never baked in).
+- **Local container:** the image never contains data; mount the data directory
+  as a volume at `/data`:
+
+  ```bash
+  docker build -t spotify-tracks-app .
+  docker run --rm -p 8050:8050 \
+      -v /home/wo222/spotify-tracks-web-app-data:/data:ro \
+      spotify-tracks-app
+  # open http://localhost:8050
+  ```
 - **Plotly Cloud:** `scripts/deploy_prep.py` builds a temporary folder combining the
   code with the precomputed data files for the Dash/Plotly CLI, keeping the repo
   itself data-free.

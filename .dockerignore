@@ -1,0 +1,25 @@
+# Keep the build context small and never ship data or local envs into the image.
+.git
+.github
+.venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# Tests and docs are not needed at runtime.
+tests
+
+# Data must never enter the image (mounted as a volume instead).
+data
+datasets
+*.parquet
+*.csv
+
+# Local tooling
+.vscode
+.idea
+.DS_Store
+.pre-commit-config.yaml
