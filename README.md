@@ -3,6 +3,10 @@
 A [Dash](https://dash.plotly.com/) + [Plotly](https://plotly.com/python/) app for
 exploring the [Ultimate Spotify Tracks DB](https://www.kaggle.com/datasets/zaheenhamidani/ultimate-spotify-tracks-db).
 
+**Live app:** https://f1cd7b3c-4c73-4666-8415-865d1a8c3237.plotly.app/
+(note: the UMAP figure takes a few seconds to load/render on the full ~230k-row
+dataset)
+
 Two tabs:
 
 1. **UMAP map** — every track is one point in a 2-D UMAP projection of its numeric
