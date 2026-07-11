@@ -69,5 +69,5 @@ GENRE_COLUMN: str = "genre"
 # During development we work on a reproducible fraction of the rows. Set
 # SAMPLE_FRAC = 1.0 to use the full dataset -- this single toggle removes (or
 # restores) the sampling step; see data.apply_sampling.
-SAMPLE_FRAC: float = 0.10
+SAMPLE_FRAC: float = 1.0
 SAMPLE_RANDOM_STATE: int = 42
