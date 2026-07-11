@@ -25,6 +25,9 @@ precompute run, so the project is reproducible from a clean checkout.
 ## Setup
 
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+Requires **uv >= 0.5** (for PEP 735 dependency groups; developed with uv 0.11.28).
+Update uv with `uv self update`, or install it via
+`curl -LsSf https://astral.sh/uv/install.sh | sh`.
 
 ```bash
 uv sync                 # create .venv and install runtime + dev deps
