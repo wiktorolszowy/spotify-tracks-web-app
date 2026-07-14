@@ -31,8 +31,8 @@ from .. import config, preprocessing
 TAB_LABEL: str = "1 - UMAP map"
 TAB_VALUE: str = "umap"
 
-# Columns that are plot coordinates rather than track data (kept out of hover).
-_COORD_COLUMNS = ("umap_x", "umap_y")
+# Columns excluded from hover payload/tooltips.
+_EXCLUDED_HOVER_COLUMNS = ("umap_x", "umap_y", "track_id")
 
 
 @functools.lru_cache(maxsize=1)
@@ -46,7 +46,7 @@ def _load_umap_df() -> pd.DataFrame:
 
 
 def _hover_template(hover_columns: list[str]) -> str:
-    """Build a hover template that shows every underlying CSV column.
+    """Build a hover template for the selected hover columns.
 
     Args:
         hover_columns: Column names, in the order they appear in ``customdata``.
@@ -69,7 +69,7 @@ def _build_figure() -> go.Figure:
         The Plotly figure.
     """
     df = _load_umap_df()
-    hover_columns = [c for c in df.columns if c not in _COORD_COLUMNS]
+    hover_columns = [c for c in df.columns if c not in _EXCLUDED_HOVER_COLUMNS]
     hovertemplate = _hover_template(hover_columns)
 
     fig = go.Figure()
@@ -95,6 +95,20 @@ def _build_figure() -> go.Figure:
         margin={"l": 40, "r": 40, "t": 30, "b": 40},
     )
     return fig
+
+
+@functools.lru_cache(maxsize=1)
+def _figure_dict() -> dict:
+    """Return the UMAP figure as a plain dict (cached for the app's lifetime).
+
+    Dash re-serializes a returned ``go.Figure`` on every tab switch. Caching the
+    already-converted dict lets each render reuse it and skip the repeated
+    ``Figure`` -> dict conversion of ~230k points.
+
+    Returns:
+        The figure as a JSON-serialisable dict.
+    """
+    return _build_figure().to_dict()
 
 
 def _explanation() -> Component:
@@ -160,7 +174,7 @@ def layout() -> Component:
             ),
             dcc.Graph(
                 id="umap-graph",
-                figure=_build_figure(),
+                figure=_figure_dict(),
                 config={"scrollZoom": True},
             ),
         ]

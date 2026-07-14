@@ -85,8 +85,12 @@ def _ranked_features(
     return scores
 
 
+@functools.cache
 def _build_figure(genre: str) -> go.Figure:
     """Build the ranked overlaid-histogram figure for a genre.
+
+    Cached per genre: re-selecting a genre reuses the figure instead of
+    recomputing the KS test, feature ranking, and histograms.
 
     Args:
         genre: The genre to analyse.
@@ -149,6 +153,22 @@ def _build_figure(genre: str) -> go.Figure:
     )
     fig.update_yaxes(title_text="Density")
     return fig
+
+
+@functools.cache
+def _figure_dict(genre: str) -> dict:
+    """Return the KS figure for a genre as a plain dict (cached per genre).
+
+    Mirrors the UMAP tab: caching the already-converted dict lets Dash reuse it
+    across repeat selections and skip the ``Figure`` -> dict conversion.
+
+    Args:
+        genre: The genre to analyse.
+
+    Returns:
+        The figure as a JSON-serialisable dict.
+    """
+    return _build_figure(genre).to_dict()
 
 
 def _explanation() -> Component:
@@ -244,7 +264,7 @@ def register_callbacks(app: Dash) -> None:
     """
 
     @app.callback(Output("ks-graph", "figure"), Input("ks-genre", "value"))
-    def _update(genre: str) -> go.Figure:
+    def _update(genre: str) -> dict:
         """Rebuild the ranked histograms when the selected genre changes.
 
         Args:
@@ -253,4 +273,4 @@ def register_callbacks(app: Dash) -> None:
         Returns:
             The updated figure.
         """
-        return _build_figure(genre)
+        return _figure_dict(genre)

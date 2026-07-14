@@ -33,6 +33,7 @@ from spotify_tracks_app import config
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _SRC_PACKAGE = _REPO_ROOT / "src" / "spotify_tracks_app"
 _DEFAULT_OUTPUT = _REPO_ROOT.parent / "spotify-tracks-web-app-deploy"
+_REPO_CLOUD_CONFIG = _REPO_ROOT / "plotly-cloud.toml"
 
 # Runtime dependencies, declared in a pyproject.toml so Plotly Cloud's uv-based
 # runtime (`uv run`) has a project environment to resolve -- a bare
@@ -55,6 +56,7 @@ dependencies = [
     "scipy>=1.13",
     "pyarrow>=16.0",
     "gunicorn>=22.0",
+    "flask-compress>=1.15",
 ]
 
 [tool.uv]
@@ -124,11 +126,14 @@ def build_deploy_folder(output_dir: Path) -> None:
     """
     _require_precomputed()
 
-    # Preserve the Plotly Cloud app binding (written by `plotly app publish`)
-    # across rebuilds, so republishing updates the same app instead of creating
-    # a new one or prompting for a name again.
+    # Preserve the Plotly Cloud app binding across rebuilds. If the deploy
+    # folder doesn't have one yet, seed it from the canonical repo config.
     cloud_config = output_dir / "plotly-cloud.toml"
-    saved_cloud_config = cloud_config.read_text() if cloud_config.is_file() else None
+    saved_cloud_config = None
+    if cloud_config.is_file():
+        saved_cloud_config = cloud_config.read_text()
+    elif _REPO_CLOUD_CONFIG.is_file():
+        saved_cloud_config = _REPO_CLOUD_CONFIG.read_text()
 
     if output_dir.exists():
         shutil.rmtree(output_dir)
