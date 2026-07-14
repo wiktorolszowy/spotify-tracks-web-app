@@ -11,10 +11,15 @@ from __future__ import annotations
 
 from dash import Dash
 from flask import Flask
+from flask_compress import Compress
 
 from .api import register_api
 
 server: Flask = Flask(__name__)
+
+# Gzip responses (notably the large UMAP figure payload) before sending them to
+# the browser. This is a no-op for already-small responses.
+Compress(server)
 
 app: Dash = Dash(
     __name__,

@@ -46,6 +46,8 @@ uv run python scripts/precompute.py
 
 # 2. Run the app locally.
 uv run python -m spotify_tracks_app.app
+# If port 8050 is already in use, free it and start again.
+lsof -tiTCP:8050 -sTCP:LISTEN | xargs -r kill -9
 
 # 3. Quality checks.
 uv run pre-commit run --all-files
@@ -88,7 +90,9 @@ To run on the full dataset, set `SAMPLE_FRAC = 1.0` in
   pip install plotly-cloud     # provides the `plotly` CLI
   deactivate
   plotly user login            # authenticate (OAuth in the browser)
-  plotly app publish           # publish to Plotly Cloud
+  plotly app publish --config plotly-cloud.toml
+  # from the repo root, use:
+  # plotly app publish --project-path ../spotify-tracks-web-app-deploy --config plotly-cloud.toml
   #   or: pip install "dash[cloud]" && python app.py, then use the dev-tools panel
   #   or: upload the folder at https://cloud.plotly.com (< 80 MiB)
   ```
